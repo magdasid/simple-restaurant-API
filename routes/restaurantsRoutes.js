@@ -75,5 +75,20 @@ module.exports = (app) => {
     });
   });
 
-  
+  app.post('/api/Restaurant/addOpinion', passport.authenticate('jwt', {session: false}), (req, res) => {
+      Restaurant.findByIdAndUpdate(req.body.restaurantId,
+        {
+        $push: {
+          opinions: {
+            opinion_content: req.body.opinion,
+            user_id: req.user._id,
+            user_name: req.user.name
+          }
+        }
+      }, function (err, product) {
+        console.log(req.body);
+          if (err) console.log(err);
+          res.send('Opinion of restaurant added');
+      });
+  });
 };
