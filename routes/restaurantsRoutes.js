@@ -22,7 +22,12 @@ module.exports = (app) => {
   // get restaurant by name
   app.get('/api/Restaurant/getByName/:name', (req, res) => {
     const restaurantName = req.params.name;
-    Restaurant.find({ name: {'$regex' : '.*' + restaurantName + '.*', '$options': 'i'  } })
+    Restaurant.find({
+      name: {
+        '$regex' : '.*' + restaurantName + '.*',
+        '$options': 'i'
+      }
+    })
     .then(data => {
       if(data.length === 0) {
         return res.status(404).json({
@@ -37,8 +42,42 @@ module.exports = (app) => {
 
   // get restaurants by cuisine
   app.get('/api/Restaurant/getByCuisine/:cuisine', (req, res) => {
-    const cuisineName = req.params.cuisine;
-    Restaurant.find({ cuisines: {'$regex' : '.*' + cuisineName + '.*', '$options': 'i'  } })
+    const cuisine = req.params.cuisine;
+    Restaurant.find({
+      cuisines: {
+        $regex: '.*' + cuisine + '.*',
+        $options: 'igm'
+      }
+    })
+    .then(data => {
+      res.send(data);
+    });
+  });
+
+  // get restaurants by city
+  app.get('/api/Restaurant/getByCity/:city', (req, res) => {
+    const city = req.params.city;
+    Restaurant.find({
+      'location.city': city
+    })
+    .then(data => {
+      res.send(data);
+    });
+  });
+
+  app.get('/api/Restaurant/getByCuisineAndCity/:cuisine&:city', (req, res) => {
+    const cuisine = req.params.cuisine;
+    const city = req.params.city;
+    Restaurant.find({
+      cuisines: {
+        $regex: '.*' + cuisine + '.*',
+        $options: 'igm'
+      },
+      'location.city': {
+        $regex: '.*' + city + '.*',
+        $options: 'igm'
+      }
+    })
     .then(data => {
       res.send(data);
     });
@@ -46,21 +85,6 @@ module.exports = (app) => {
 
   // get restaurant by id
   app.get('/api/Restaurant/getById/:id', (req, res) => {
-    const id = req.params.id;
-    Restaurant.find({ _id: id })
-    .then(data => {
-      if(data.length === 0) {
-        return res.status(404).json({
-          message: 'Restaurant not found'
-        })
-      }
-      res.status(200).json({
-        restaurants: data
-      })
-    });
-  });
-
-  app.get('/api/Restaurant/getByLocation/:id', (req, res) => {
     const id = req.params.id;
     Restaurant.find({ _id: id })
     .then(data => {
