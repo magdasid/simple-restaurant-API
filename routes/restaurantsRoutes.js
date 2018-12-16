@@ -65,6 +65,7 @@ module.exports = (app) => {
     });
   });
 
+  //get by cuisine and city
   app.get('/api/Restaurant/getByCuisineAndCity/:cuisine&:city', (req, res) => {
     const cuisine = req.params.cuisine;
     const city = req.params.city;
@@ -86,7 +87,9 @@ module.exports = (app) => {
   // get restaurant by id
   app.get('/api/Restaurant/getById/:id', (req, res) => {
     const id = req.params.id;
-    Restaurant.find({ _id: id })
+    Restaurant.find({
+      _id: id
+    })
     .then(data => {
       if(data.length === 0) {
         return res.status(404).json({
@@ -99,6 +102,29 @@ module.exports = (app) => {
     });
   });
 
+  app.get('/api/Restaurant/getByLocation/', (req, res) => {
+    const long = req.params.long;
+    const latt = req.params.latt;
+
+    Restaurant.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [52.217569, 21.004512]
+          },
+          $maxDistance: 1000,
+          $minDistance: 0
+        }
+      }
+    }).then(data => {
+      res.status(200).json({
+        restaurants: data
+      })
+    });
+  });
+
+  // adding opinion of the restaurant by a logged user
   app.post('/api/Restaurant/addOpinion', passport.authenticate('jwt', {session: false}), (req, res) => {
       Restaurant.findByIdAndUpdate(req.body.restaurantId,
         {

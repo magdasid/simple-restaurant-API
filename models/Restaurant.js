@@ -8,8 +8,8 @@ const restaurantSchema = new Schema({
     address: String,
     locality: String,
     city: String,
-    latitude: String,
-    longitude: String
+    type: { type: String },
+    coordinates: []
   },
   cousines: String,
   price_rang: Number,
@@ -27,4 +27,5 @@ const restaurantSchema = new Schema({
   ]
 });
 
+restaurantSchema.index({ location: "2dsphere" });
 mongoose.model('restaurants', restaurantSchema);
