@@ -12,4 +12,4 @@ npm install
 npm run dev
 ```
 
-React Native app: https://github.com/magdasid/simple-restaurant-react-native-app/blob/master/README.md
+React Native app: https://github.com/magdasid/simple-restaurant-react-native-app/
