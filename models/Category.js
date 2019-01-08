@@ -7,5 +7,4 @@ const categorySchema = new Schema({
   photo: String
 });
 
-categorySchema.index({ location: "2dsphere" });
 mongoose.model('categories', categorySchema);
