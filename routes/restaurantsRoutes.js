@@ -50,7 +50,9 @@ module.exports = (app) => {
       }
     })
     .then(data => {
-      res.send(data);
+      res.status(200).json({
+        restaurants: data
+      })
     });
   });
 
