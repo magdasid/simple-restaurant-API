@@ -104,9 +104,10 @@ module.exports = (app) => {
     });
   });
 
-  app.get('/api/Restaurant/getByLocation/:long&:latt', (req, res) => {
+  app.get('/api/Restaurant/getByLocation/:long&:latt&:distance', (req, res) => {
     const long = req.params.long;
     const latt = req.params.latt;
+    const distance = req.params.distance;
     Restaurant.find({
       location: {
         $near: {
@@ -114,7 +115,7 @@ module.exports = (app) => {
             type: "Point",
             coordinates: [long, latt]
           },
-          $maxDistance: 5000,
+          $maxDistance: distance,
           $minDistance: 0
         }
       }
