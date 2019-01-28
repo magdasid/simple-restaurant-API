@@ -29,11 +29,6 @@ module.exports = (app) => {
       }
     })
     .then(data => {
-      if(data.length === 0) {
-        return res.status(404).json({
-          message: `Restaurant ${restaurantName} not found`
-        })
-      }
       res.status(200).json({
         restaurants: data
       })
